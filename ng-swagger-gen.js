@@ -670,6 +670,7 @@ function processModels(swagger, options) {
       modelEnumValues: enumValues,
       modelElementType: elementType,
       modelSubclasses: [],
+      modelImportThirdParty: [],
     };
 
     if (descriptor.properties != null) {
@@ -721,6 +722,12 @@ function processModels(swagger, options) {
   };
   for (name in models) {
     model = models[normalizeModelName(name)];
+    for (propertyName in model.properties) {
+      let property = model.properties[propertyName]
+      if(property.propertyType === 'moment.Moment') {
+        model.modelThirdPartyImports = [`import * as moment from 'moment';`]
+      }
+    }
     if (model.modelIsEnum || model.modelIsSimple && !model.modelSimpleType.allTypes) {
       // Enums or simple types have no dependencies
       continue;
@@ -850,6 +857,9 @@ function propertyType(property) {
       }
       else if (property.const) {
         return '\'' + property.const + '\'';
+      }
+      else if (property.format === 'date' || property.format === 'date-time') {
+        return 'moment.Moment';
       }
       return 'string';
     case 'array':

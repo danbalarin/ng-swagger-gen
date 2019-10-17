@@ -1,6 +1,10 @@
 /* tslint:disable */
+{{#modelThirdPartyImports}}{{{.}}}
+{{/modelThirdPartyImports}}
+
 {{#modelDependencies}}import { {{modelClass}} } from './{{modelFile}}';
 {{/modelDependencies}}
+
 {{#modelIsObject}}{{>object}}{{/modelIsObject
 }}{{#modelIsEnum}}{{>enum}}{{/modelIsEnum
 }}{{#modelIsArray}}{{>array}}{{/modelIsArray
